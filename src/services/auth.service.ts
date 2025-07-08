@@ -14,7 +14,8 @@ export class AuthService {
 
   static async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !(await bcrypt.compare(password, user.password))) throw new Error('Error de login');
+    if (!user) throw new Error('Usuario no encontrado');
+    if (!(await bcrypt.compare(password, user.password))) throw new Error('Contaseña incorrecta');
     return signToken({ id: user.id, role: user.role });
   }
 }
