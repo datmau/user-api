@@ -1,53 +1,51 @@
 import { Request, Response } from "express";
-import { UserService } from '../services/user.service';
+import { UserService } from "../services/user.service";
 
 export class UserController {
 
-    static async getAll(req: Request, res: Response){
-        const users = await UserService.getAll();
-        res.json(users);
+  static async getAllUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const users = await UserService.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener usuarios', error });
     }
+  }
 
-    static async getById(req: Request, res: Response){
-        const user = await UserService.getById(req.params.id);
-        if (!user) {
-            res.status(404).json({ message: 'User not found' });
-            return;
-        }
-        res.json(user);
+  static async getPublicUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const users = await UserService.getPublicUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener usuarios públicos', error });
     }
+  }
 
-    static async create(req: Request, res: Response){
-        const { email, password, role } = req.body;
-        if (!email || !password || !role) {
-            res.status(400).json({ message: 'Email, password and role are required' });
-            return;
-        }
-        const user = await UserService.create({ email, password, role });
-        res.status(201).json(user);
+  static async getUserById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const user = await UserService.getUserById(id);
+      if (!user) {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+        return;
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener usuario', error });
     }
+  }
 
-    static async update(req: Request, res: Response){
-        const { email, password, role } = req.body;
-        if (!email && !password && !role) {
-            res.status(400).json({ message: 'At least one field is required to update' });
-            return;
-        }
-        const user = await UserService.update(req.params.id, { email, password, role });
-        if (!user) {
-            res.status(404).json({ message: 'User not found' });
-            return;
-        }
-        res.json(user);
+  static async getPublicUserById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const user = await UserService.getPublicUserById(id);
+      if (!user) {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+        return;
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener usuario público', error });
     }
-
-    static async delete(req: Request, res: Response){
-        const user = await UserService.getById(req.params.id);
-        if (!user) {
-            res.status(404).json({ message: 'User not found' });
-            return;
-        }
-        await UserService.delete(req.params.id);
-        res.status(204).send();
-    }
-};
+  }
+} 

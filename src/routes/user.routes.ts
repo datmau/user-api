@@ -1,15 +1,17 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/user.controller'; 
+import { UserController } from '../controllers/user.controller';
 import { isAuthenticated } from '../middlewares/auth.middleware';
 import { authorizeRole } from '../middlewares/role.middleware';
+import { Role } from '@prisma/client';
 
 const router = Router();
 
-router.get('/', isAuthenticated, authorizeRole(['USER','ADMIN']), UserController.getAll);
-router.get('/:id', isAuthenticated, authorizeRole(['USER','ADMIN']), UserController.getById);
-router.post('/', isAuthenticated, authorizeRole(['ADMIN']), UserController.create);
-router.patch('/:id', isAuthenticated, authorizeRole(['ADMIN']), UserController.update);
-//router.put('/:id', isAuthenticated, authorizeRole(['ADMIN']), UserController.update);
-router.delete('/:id', isAuthenticated, authorizeRole(['ADMIN']), UserController.delete);
- 
-export default router;
+// Rutas protegidas para usuarios autenticados
+router.get('/users', isAuthenticated, authorizeRole([Role.ADMIN, Role.USER]), UserController.getAllUsers);
+router.get('/users/:id', isAuthenticated, authorizeRole([Role.ADMIN, Role.USER]), UserController.getUserById);
+
+// Rutas públicas (sin email y password)
+router.get('/public/users', UserController.getPublicUsers);
+router.get('/public/users/:id', UserController.getPublicUserById);
+
+export default router; 
