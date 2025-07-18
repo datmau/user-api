@@ -9,6 +9,8 @@ const router = Router();
 // Rutas protegidas para usuarios autenticados
 router.get('/users', isAuthenticated, authorizeRole([Role.ADMIN, Role.USER]), UserController.getAllUsers);
 router.get('/users/:id', isAuthenticated, authorizeRole([Role.ADMIN, Role.USER]), UserController.getUserById);
+router.patch('/users/:id', isAuthenticated, authorizeRole([Role.ADMIN]), UserController.updateUser);
+router.delete('/users/:id', isAuthenticated, authorizeRole([Role.ADMIN]), UserController.deleteUser);
 
 // Rutas públicas (sin email y password)
 router.get('/public/users', UserController.getPublicUsers);

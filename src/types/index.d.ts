@@ -28,6 +28,14 @@ export interface RegisterData {
   bio?: string;
 }
 
+export interface UpdateUserData {
+  name?: string;
+  email?: string;
+  role?: Role;
+  avatar?: string;
+  bio?: string;
+}
+
 export interface LoginResponse {
   token: string;
   id: string;

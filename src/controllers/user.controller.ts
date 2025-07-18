@@ -48,4 +48,48 @@ export class UserController {
       res.status(500).json({ message: 'Error al obtener usuario público', error });
     }
   }
+
+  static async updateUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { name, email, role, avatar, bio } = req.body;
+      
+      // Verificar que al menos un campo está presente
+      if (!name && !email && !role && !avatar && !bio) {
+        res.status(400).json({ 
+          message: 'Debe proporcionar al menos un campo para actualizar' 
+        });
+        return;
+      }
+
+      const updatedUser = await UserService.updateUser(id, { name, email, role, avatar, bio });
+      res.json(updatedUser);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Usuario no encontrado') {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      } else {
+        res.status(500).json({ 
+          message: 'Error al actualizar usuario', 
+          error: error instanceof Error ? error.message : 'Error desconocido' 
+        });
+      }
+    }
+  }
+
+  static async deleteUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const result = await UserService.deleteUser(id);
+      res.json(result);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Usuario no encontrado') {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      } else {
+        res.status(500).json({ 
+          message: 'Error al eliminar usuario', 
+          error: error instanceof Error ? error.message : 'Error desconocido' 
+        });
+      }
+    }
+  }
 } 

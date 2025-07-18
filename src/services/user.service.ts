@@ -1,4 +1,13 @@
 import { prisma } from '../lib/prisma';
+import { Role } from '@prisma/client';
+
+interface UpdateUserData {
+  name?: string;
+  email?: string;
+  role?: Role;
+  avatar?: string;
+  bio?: string;
+}
 
 export class UserService {
   
@@ -24,6 +33,7 @@ export class UserService {
         role: true,
         avatar: true,
         bio: true,
+        createdAt: true
       }
     });
   }
@@ -52,7 +62,46 @@ export class UserService {
         role: true,
         avatar: true,
         bio: true,
+        createdAt: true
       }
     });
+  }
+
+  static async updateUser(id: string, data: UpdateUserData) {
+    // Verificar que el usuario existe
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+    if (!existingUser) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    // Actualizar solo los campos proporcionados
+    return await prisma.user.update({
+      where: { id },
+      data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        avatar: true,
+        bio: true,
+        createdAt: true
+      }
+    });
+  }
+
+  static async deleteUser(id: string) {
+    // Verificar que el usuario existe
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+    if (!existingUser) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    // Eliminar el usuario
+    await prisma.user.delete({
+      where: { id }
+    });
+
+    return { message: 'Usuario eliminado exitosamente' };
   }
 } 
