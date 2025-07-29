@@ -1,13 +1,5 @@
 import { prisma } from '../lib/prisma';
-import { Role } from '@prisma/client';
-
-interface UpdateUserData {
-  name?: string;
-  email?: string;
-  role?: Role;
-  avatar?: string;
-  bio?: string;
-}
+import { UpdateUserData } from '../types';
 
 export class UserService {
   
@@ -28,13 +20,9 @@ export class UserService {
   static async getPublicUsers() {
     return await prisma.user.findMany({
       select: {
-        id: true,
         name: true,
-        role: true,
         avatar: true,
-        bio: true,
-        createdAt: true
-      }
+        bio: true      }
     });
   }
 
@@ -57,12 +45,9 @@ export class UserService {
     return await prisma.user.findUnique({
       where: { id },
       select: {
-        id: true,
         name: true,
-        role: true,
         avatar: true,
         bio: true,
-        createdAt: true
       }
     });
   }

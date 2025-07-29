@@ -1,5 +1,7 @@
 import { Role } from '@prisma/client';
 
+
+// DTO (Data Transfer Object) definitions for user-related operations
 export interface User {
   id: string;
   name: string;
@@ -11,12 +13,9 @@ export interface User {
 }
 
 export interface PublicUser {
-  id: string;
   name: string;
-  role: Role;
   avatar?: string;
   bio?: string;
-  createdAt: Date;
 }
 
 export interface RegisterData {
