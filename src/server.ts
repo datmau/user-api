@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import { errorHandler } from './middlewares/error.middleware';
 
 dotenv.config();
 
@@ -13,8 +14,16 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 
+// Error handling middleware should be added after all routes
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    errorHandler(err, req, res, next);
+});
+
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;

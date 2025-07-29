@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError';
 import { prisma } from '../lib/prisma';
 import { UpdateUserData } from '../types';
 
@@ -27,7 +28,8 @@ export class UserService {
   }
 
   static async getUserById(id: string) {
-    return await prisma.user.findUnique({
+
+    const user = await prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
@@ -39,24 +41,33 @@ export class UserService {
         createdAt: true
       }
     });
+
+    if (!user) {
+      throw new AppError('Usuario no encontrado', 404);
+    }
+    return user;
   }
 
   static async getPublicUserById(id: string) {
-    return await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id },
       select: {
         name: true,
         avatar: true,
-        bio: true,
+        bio: true
       }
     });
+    if (!user) {
+      throw new AppError('Usuario no encontrado', 404); 
+    }
+    return user;
   }
 
   static async updateUser(id: string, data: UpdateUserData) {
     // Verificar que el usuario existe
     const existingUser = await prisma.user.findUnique({ where: { id } });
     if (!existingUser) {
-      throw new Error('Usuario no encontrado');
+      throw new AppError('Usuario no encontrado', 404);
     }
 
     // Actualizar solo los campos proporcionados
@@ -79,7 +90,7 @@ export class UserService {
     // Verificar que el usuario existe
     const existingUser = await prisma.user.findUnique({ where: { id } });
     if (!existingUser) {
-      throw new Error('Usuario no encontrado');
+      throw new AppError('Usuario no encontrado', 404);
     }
 
     // Eliminar el usuario

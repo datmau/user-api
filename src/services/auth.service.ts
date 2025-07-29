@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../lib/prisma';
 import { signToken } from '../utils/jwt';
 import { Role } from '@prisma/client';
+import { AppError } from '../errors/AppError';
 
 interface RegisterData {
   name: string;
@@ -32,7 +33,7 @@ export class AuthService {
 
   static async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !(await bcrypt.compare(password, user.password))) throw new Error('Error de login');
+    if (!user || !(await bcrypt.compare(password, user.password))) throw new AppError('Error de login', 401);
     return { token: signToken({ id: user.id, role: user.role }), id: user.id, name: user.name, email: user.email, role: user.role };
   }
 }
