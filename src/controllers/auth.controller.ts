@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { validateDto } from "../middlewares/validate.middleware";
-import { CreateUserDto } from "../dto/user.dto";
+import { CreateUserDto } from "../dto/create-user.dto";
 
 export class AuthController {
 

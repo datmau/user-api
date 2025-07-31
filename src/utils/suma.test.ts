@@ -14,7 +14,7 @@ describe('Función suma', () => {
     expect(resultado).toBe(resultadoEsperado);
   });
 
-  test('Si ingreso una letra en lugar de un número, debe lanzar un error', () => {
+  test('Si ingreso una letra en lugar de un número, debe lanzar un error ', () => {
     // Arrange
     const a = 'a' as unknown as number; // Pasamos una letra como parámetro
     const b = 2; // Este sí es un número válido

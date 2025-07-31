@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "test": "jest"
+    "test": "jest --watchAll",
+    "test:cov": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false"
   },
   "repository": {
     "type": "git",

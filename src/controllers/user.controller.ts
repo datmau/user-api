@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import { validateDto } from "../middlewares/validate.middleware";
+import { UpdateUserDto } from "../dto/update-user.dto";
 
 export class UserController {
 
@@ -51,19 +53,13 @@ export class UserController {
 
   static async updateUser(req: Request, res: Response): Promise<void> {
     try {
+      validateDto(UpdateUserDto)(req, res, async () => {
       const { id } = req.params;
       const { name, email, role, avatar, bio } = req.body;
-      
-      // Verificar que al menos un campo está presente
-      if (!name && !email && !role && !avatar && !bio) {
-        res.status(400).json({ 
-          message: 'Debe proporcionar al menos un campo para actualizar' 
-        });
-        return;
-      }
+    
 
       const updatedUser = await UserService.updateUser(id, { name, email, role, avatar, bio });
-      res.json(updatedUser);
+      res.json(updatedUser);})
     } catch (error) {
       if (error instanceof Error && error.message === 'Usuario no encontrado') {
         res.status(404).json({ message: 'Usuario no encontrado' });
