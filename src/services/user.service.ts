@@ -39,7 +39,7 @@ export class UserService {
         avatar: true,
         bio: true,
         createdAt: true
-      }
+      },
     });
 
     if (!user) {
