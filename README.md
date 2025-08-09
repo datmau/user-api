@@ -21,3 +21,17 @@ Run these command to init the prisma ORM:
     npx prisma init
 ```
 
+# Migrations
+For create a new migration you type:
+```bash
+    npx prisma migrate dev --name descriptive_name_for_migration
+```
+Then you geneate or update your prisma client:
+```bash
+    npx prisma generate
+```
+
+For pushing all changes to your db use:
+```bash
+    npx prisma db push 
+```

@@ -19,9 +19,28 @@ model User {
   email     String   @unique
   password  String
   role      Role     @default(USER)
-  avatar    String?
-  bio       String?
   createdAt DateTime @default(now())
+  profile   Profile?
+  posts     Posts[]
+}
+
+model Profile {
+  id          String @id @default(uuid())
+  country     String?
+  facebookUrl String?
+  avatar      String?
+  bio         String?
+  userId      String @unique
+  user        User @relation(fields: [userId], references: [id])
+}
+
+model Posts {
+  id        String @id @default(uuid())
+  title     String? @db.VarChar(100)
+  content   String? @db.Text
+  authorId  String
+  author User @relation(fields:[authorId], references:[id], onDelete: Cascade)
+
 }
 
 enum Role {
