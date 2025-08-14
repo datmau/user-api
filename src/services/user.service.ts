@@ -28,13 +28,14 @@ export class UserService {
 
     const user = await prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true
-      },
+      include: {
+        profile: {
+          select: {
+            avatar: true,
+            bio: true,
+          }
+        }
+      }
     });
 
     if (!user) {

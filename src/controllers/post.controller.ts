@@ -13,4 +13,13 @@ export class PostController {
         const response = await PostService.createPost(postData as CreatePostType);
         res.status(201).json(response);
     }
+
+    static async getAllPost(req: Request, res: Response) {
+        try {
+            const posts = await PostService.getAllPosts();
+            res.json(posts);
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener publicaciones', error });
+        }
+    }
 }

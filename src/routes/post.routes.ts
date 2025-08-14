@@ -7,6 +7,7 @@ const router = Router();
 
 
 router.post('', isAuthenticated,  authorizeRole([Role.ADMIN, Role.USER]), PostController.createPost);
+router.get('', isAuthenticated, authorizeRole([Role.ADMIN, Role.USER]), PostController.getAllPost);
 
 export default router;
 
