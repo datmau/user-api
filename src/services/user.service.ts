@@ -3,7 +3,7 @@ import { prisma } from '../lib/prisma';
 import { UpdateUserData } from '../types';
 
 export class UserService {
-  
+
   static async getAllUsers() {
     return await prisma.user.findMany({
       select: {
@@ -11,8 +11,6 @@ export class UserService {
         name: true,
         email: true,
         role: true,
-        avatar: true,
-        bio: true,
         createdAt: true
       }
     });
@@ -21,9 +19,8 @@ export class UserService {
   static async getPublicUsers() {
     return await prisma.user.findMany({
       select: {
-        name: true,
-        avatar: true,
-        bio: true      }
+        name: true
+      }
     });
   }
 
@@ -36,8 +33,6 @@ export class UserService {
         name: true,
         email: true,
         role: true,
-        avatar: true,
-        bio: true,
         createdAt: true
       },
     });
@@ -53,12 +48,10 @@ export class UserService {
       where: { id },
       select: {
         name: true,
-        avatar: true,
-        bio: true
       }
     });
     if (!user) {
-      throw new AppError('Usuario no encontrado', 404); 
+      throw new AppError('Usuario no encontrado', 404);
     }
     return user;
   }
@@ -79,8 +72,6 @@ export class UserService {
         name: true,
         email: true,
         role: true,
-        avatar: true,
-        bio: true,
         createdAt: true
       }
     });

@@ -24,8 +24,6 @@ export class AuthService {
         email, 
         password: hash, 
         role,
-        avatar,
-        bio 
       } 
     });
     return signToken({ id: user.id, role: user.role });
